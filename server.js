@@ -9,7 +9,7 @@ var cheerio = require("cheerio");
 var db = require("./models");
 
 // Set port to listen on
-var PORT = process.env.PORT || 3000
+var PORT = process.env.PORT || 3000;
 
 // Initialize Express
 var app = express();
@@ -64,13 +64,13 @@ app.get("/scrape", function(req, res) {
     }
 
     groups.forEach(group => {
-      result.rank = parseInt(group[0])
-      result.name = group[1]
-      result.reviews = parseInt(group[2])
-      result.abv = parseFloat(group[3])
-      result.score = parseFloat(group[4])
-      result.throwAway = group[5]
-      result.url = group[6]
+      result.rank = parseInt(group[0]);
+      result.name = group[1];
+      result.reviews = parseInt(group[2]);
+      result.abv = parseFloat(group[3]);
+      result.score = parseFloat(group[4]);
+      result.throwAway = group[5];
+      result.url = group[6];
 
       db.Beer.create(result)
         .then(function(dbBeer) {
@@ -84,7 +84,7 @@ app.get("/scrape", function(req, res) {
     });
 
     // Send a message to the client
-    res.send("Scrape Complete");
+    return res.redirect("/");
   });
 });
 
@@ -140,6 +140,18 @@ app.post("/beers/:id", function(req, res) {
       // If an error occurred, send it to the client
       res.json(err);
     });
+});
+
+app.get("/cleardata", function(req, res) {
+  db.Beer.deleteMany({}, function (err) {
+    if (err) return handleError(err);
+  }).then(function() {
+    db.Note.deleteMany({}, function (err) {
+      if (err) return handleError(err);
+    }).then(function(){
+      return res.redirect("/")
+    })
+  })
 });
 
 // Start the server

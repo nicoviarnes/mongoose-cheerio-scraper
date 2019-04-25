@@ -38,6 +38,10 @@ $(document).on('show.bs.modal', '#exampleModalCenter', function (event) {
     });
 })
 
+$(document).on('hide.bs.modal', "#exampleModalCenter", function (event) {
+  $("#bodyinput").val("");
+})
+
 // When you click the savenote button
 $(document).on("click", "#saveNote", function() {
   // Grab the id associated with the article from the submit button
@@ -56,6 +60,8 @@ $(document).on("click", "#saveNote", function() {
     .then(function(data) {
       // Log the response
       console.log(data);
+      $("#exampleModalCenter").modal('hide')
+      $("#bodyinput").val("");
     });
 
 });
